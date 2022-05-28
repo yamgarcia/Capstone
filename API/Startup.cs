@@ -39,7 +39,7 @@ namespace API
             services.AddCors(setup =>
             {
                 setup.AddPolicy("AngularLocalPolicy",
-                                config => { config.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod(); });
+                                config => { config.WithOrigins("https://localhost:4200").AllowAnyHeader().AllowAnyMethod(); });
             });
             
             services.AddSwaggerGen(c =>
