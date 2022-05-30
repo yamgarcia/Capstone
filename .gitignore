@@ -461,3 +461,5 @@ origin.txt
 StudentAssets
 ssl
 ssl
+datingapp.db-shm
+datingapp.db-wal
