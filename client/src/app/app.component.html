@@ -1,11 +1,14 @@
-<h1>{{ title }}</h1>
+<app-nav></app-nav>
 
-<ul>
-  <li class="" *ngFor="let user of users">
-    {{ user.id }} - {{ user.userName }}
-  </li>
-</ul>
+<div class="container" style="margin-top: 100px">
+  <ul>
+    <li class="" *ngFor="let user of users">
+      {{ user.id }} - {{ user.userName }}
+    </li>
+  </ul>
+</div>
 
+<!--
 <div class="container">
   <h1>Install Bootstrap 5 in Angular 13 - ItSolutionStuff.com</h1>
 
@@ -17,7 +20,8 @@
         With supporting text below as a natural lead-in to additional content.
       </p>
       <a href="#" class="btn btn-primary">Go somewhere</a>
-      <!-- <fa-icon [icon]="filmIcon"></fa-icon> -->
+      <fa-icon [icon]="filmIcon"></fa-icon> 
     </div>
   </div>
 </div>
+-->
