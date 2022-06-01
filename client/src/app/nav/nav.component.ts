@@ -12,7 +12,9 @@ export class NavComponent implements OnInit {
   loggedIn: boolean;
   constructor(private accountService: AccountService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getCurrentUser();
+  }
 
   login() {
     // console.log(this.model);
@@ -28,6 +30,20 @@ export class NavComponent implements OnInit {
   }
 
   logout() {
+    this.accountService.logout();
     this.loggedIn = false;
+  }
+
+  getCurrentUser() {
+    this.accountService.currentUser$.subscribe(
+      (user) => {
+        // Double exclamation (!!) turns objs in booleans,
+        // if null then false, if something then true
+        this.loggedIn = !!user;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }
