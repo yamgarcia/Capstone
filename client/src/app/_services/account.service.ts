@@ -14,9 +14,11 @@ import { ReplaySubject } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
+
 export class AccountService {
   baseUrl = 'https://localhost:5001/api/';
   loginRoute = 'account/login';
+  registerRoute = 'account/register';
   private currentUserSource = new ReplaySubject<User>(1);
   // "$" is used when the variable is going to be an observable
   currentUser$ = this.currentUserSource.asObservable();
@@ -34,6 +36,17 @@ export class AccountService {
         }
       })
     );
+  }
+
+  register(model: any){
+    return this.http.post(this.baseUrl + this.registerRoute, model).pipe(
+      map((user: User) => {
+        if (user) {
+          localStorage.setItem('user', JSON.stringify(user));
+          this.currentUserSource.next(user);
+        }
+      })
+    )
   }
 
   setCurrentUser(user: User) {
