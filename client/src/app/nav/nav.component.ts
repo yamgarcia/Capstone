@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { AccountService } from './../_services/account.service';
+import { User } from './../_models/user';
 
 @Component({
   //Use selector to add components to other components
@@ -9,19 +11,16 @@ import { AccountService } from './../_services/account.service';
 })
 export class NavComponent implements OnInit {
   model: any = {};
-  loggedIn: boolean;
-  constructor(private accountService: AccountService) {}
 
-  ngOnInit(): void {
-    this.getCurrentUser();
-  }
+  constructor(public accountService: AccountService) {}
+
+  ngOnInit(): void {}
 
   login() {
     // console.log(this.model);
     this.accountService.login(this.model).subscribe(
       (res) => {
         console.log(res);
-        this.loggedIn = true;
       },
       (err) => {
         console.log(err);
@@ -31,19 +30,9 @@ export class NavComponent implements OnInit {
 
   logout() {
     this.accountService.logout();
-    this.loggedIn = false;
   }
 
-  getCurrentUser() {
-    this.accountService.currentUser$.subscribe(
-      (user) => {
-        // Double exclamation (!!) turns objs in booleans,
-        // if null then false, if something then true
-        this.loggedIn = !!user;
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-  }
+  // Double exclamation (!!) turns objs in booleans,
+  // if null then false, if something then true
+  // this.loggedIn = !!user;
 }

@@ -5,7 +5,8 @@ import { User } from './../_models/user';
 import { ReplaySubject } from 'rxjs';
 
 /*
-  Services are injectable and singleton (the data isn't disposed until the application is closed)
+  Services are injectable and singleton (the data isn't disposed
+   until the application is closed).
   Components data is destroied as soon as they are not in use.
   Services are usually user for http requests but also have other uses.
 */
