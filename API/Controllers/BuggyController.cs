@@ -36,7 +36,7 @@ namespace API.Controllers
         {
             var thing = _context.Users.Find(-1);
 
-            var thinkToReturn = this.ToString();
+            var thinkToReturn = thing.ToString();
 
             return thinkToReturn;
 
