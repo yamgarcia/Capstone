@@ -19,40 +19,40 @@ export class ErrorInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
-      catchError((err) => {
-        if (err) {
-          switch (err.status) {
+      catchError((error) => {
+        if (error) {
+          switch (error.status) {
             case 400:
-              if (err.error.errors) {
+              if (error.error.errors) {
                 const modalStateErrors = [];
-                for (const key in err.error.erros) {
-                  if (err.error.erros[key]) {
-                    modalStateErrors.push(err.error.errors[key]);
+                for (const key in error.error.errors) {
+                  if (error.error.errors[key]) {
+                    modalStateErrors.push(error.error.errors[key]);
                   }
                 }
-                throw modalStateErrors;
+                throw modalStateErrors.flat();
               } else {
-                this.toastr.error(err.statusText, err.status);
+                this.toastr.error(error.error.title, error.status);
               }
               break;
             case 401:
-              this.toastr.error(err.statusText, err.status);
+              this.toastr.error('Unauthorized', error.status);
               break;
             case 404:
-              this.router.navigateByUrl('not-found');
+              this.router.navigateByUrl('/not-found');
               break;
             case 500:
               const navigationExtras: NavigationExtras = {
-                state: { error: err.error },
+                state: { error: error.error },
               };
               this.router.navigateByUrl('/server-error', navigationExtras);
             default:
               this.toastr.error('Something unexpected happened');
-              console.log(err);
+              console.log(error);
               break;
           }
         }
-        return throwError(err);
+        return throwError(error);
       })
     );
   }
