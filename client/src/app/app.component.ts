@@ -11,7 +11,7 @@ import { AccountService } from './_services/account.service';
 })
 export class AppComponent implements OnInit {
   // filmIcon = faFilm;
-  title = 'The Dating App';
+  title = 'Linko';
   users: any;
 
   constructor(private accountService: AccountService) {}
