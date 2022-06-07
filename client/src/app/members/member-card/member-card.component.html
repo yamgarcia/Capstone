@@ -1,10 +1,12 @@
 <div class="card mb-4">
-  <img
-    src="{{ member.photoUrl }}"
-    alt="{{ member.knownAs }}"
-    class="card-img-top"
-    onerror="this.onerror=null;this.src='https://i.stack.imgur.com/l60Hf.png';"
-  />
+  <div class="card-img-wrapper">
+    <img
+      src="{{ member.photoUrl }}"
+      alt="{{ member.knownAs }}"
+      class="card-img-top"
+      onerror="this.onerror=null;this.src='https://i.stack.imgur.com/l60Hf.png';"
+    />
+  </div>
   <div class="card-body p-1">
     <h6 class="card-title text-center mb-1">
       <i class="fa fa-user mr-2"></i>
