@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Member } from './../_modules/member';
+//? services in Angular let you define code or functionalities that are then
+//? accessible and reusable in many other components in your Angular project.
 
 @Injectable({
   providedIn: 'root',
