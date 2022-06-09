@@ -461,7 +461,7 @@ origin.txt
 StudentAssets
 ssl
 ssl
-datingapp.db-shm
-datingapp.db-wal
+capstone.db-shm
+capstone.db-wal
 .vscode/settings.json
 test
