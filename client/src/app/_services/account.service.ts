@@ -5,21 +5,30 @@ import { User } from './../_models/user';
 import { ReplaySubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-/*
-  Services are injectable and singleton (the data isn't disposed
-   until the application is closed).
-  Components data is destroied as soon as they are not in use.
-  Services are usually user for http requests but also have other uses.
-*/
+/**
+ * Services are injectable and singleton (the data isn't disposed
+ *  until the application is closed).
+ * Components data is destroied as soon as they are not in use.
+ * Services are usually user for http requests but also have other uses.
+ */
 
 @Injectable({
   providedIn: 'root',
 })
+
+/**
+ * AccountService provides the Observable currentUser$ and
+ * methods to interact with the database:
+ *
+ * @class AccountService
+ */
 export class AccountService {
   baseUrl = environment.apiUrl;
   loginRoute = 'account/login';
   registerRoute = 'account/register';
+  // ReplaySubject derives from Subjects which are both observables and observers
   private currentUserSource = new ReplaySubject<User>(1);
+  // asObservable creates a new observable with the subject
   // "$" is used when the variable is going to be an observable
   currentUser$ = this.currentUserSource.asObservable();
 
