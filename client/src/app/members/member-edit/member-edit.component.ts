@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { take } from 'rxjs/internal/operators/take';
 import { User } from 'src/app/_models/user';
 import { Member } from 'src/app/_modules/member';
 import { MembersService } from 'src/app/_services/members.service';
 import { AccountService } from './../../_services/account.service';
+import { ToastrService } from 'ngx-toastr';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-member-edit',
@@ -11,14 +13,17 @@ import { AccountService } from './../../_services/account.service';
   styleUrls: ['./member-edit.component.css'],
 })
 export class MemberEditComponent implements OnInit {
+  //* Used to access the form data
+  @ViewChild('editForm') editForm: NgForm;
   member: Member;
   user: User;
 
   constructor(
     private accountService: AccountService,
-    private memberService: MembersService
+    private memberService: MembersService,
+    private toastr: ToastrService
   ) {
-    //take the user out of the currentUser$ (an observable) using the pipe
+    //* take the user out of the currentUser$ (an observable) using the pipe
     this.accountService.currentUser$
       .pipe(take(1))
       .subscribe((user) => (this.user = user));
@@ -32,5 +37,12 @@ export class MemberEditComponent implements OnInit {
     this.memberService.getMember(this.user.username).subscribe((member) => {
       this.member = member;
     });
+  }
+
+  updateMember() {
+    console.log(this.member);
+    this.toastr.success('Profile Updated');
+    //* Remove the modified state in the form and keep the values inside
+    this.editForm.reset(this.member);
   }
 }
