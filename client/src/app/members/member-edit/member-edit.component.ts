@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { take } from 'rxjs/internal/operators/take';
 import { User } from 'src/app/_models/user';
 import { Member } from 'src/app/_modules/member';
@@ -15,6 +15,14 @@ import { NgForm } from '@angular/forms';
 export class MemberEditComponent implements OnInit {
   //* Used to access the form data
   @ViewChild('editForm') editForm: NgForm;
+  //* Used to inform the user they are leaving the site without saving changes
+  @HostListener('window:beforeunload', ['$event']) unloadNotification(
+    $event: any
+  ) {
+    if (this.editForm.dirty) {
+      $event.returnValue = true;
+    }
+  }
   member: Member;
   user: User;
 
