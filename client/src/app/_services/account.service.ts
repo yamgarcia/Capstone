@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { User } from './../_models/user';
 import { ReplaySubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 /*
   Services are injectable and singleton (the data isn't disposed
@@ -14,9 +15,8 @@ import { ReplaySubject } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-
 export class AccountService {
-  baseUrl = 'https://localhost:5001/api/';
+  baseUrl = environment.apiUrl;
   loginRoute = 'account/login';
   registerRoute = 'account/register';
   private currentUserSource = new ReplaySubject<User>(1);
@@ -38,7 +38,7 @@ export class AccountService {
     );
   }
 
-  register(model: any){
+  register(model: any) {
     return this.http.post(this.baseUrl + this.registerRoute, model).pipe(
       map((user: User) => {
         if (user) {
@@ -46,7 +46,7 @@ export class AccountService {
           this.currentUserSource.next(user);
         }
       })
-    )
+    );
   }
 
   setCurrentUser(user: User) {

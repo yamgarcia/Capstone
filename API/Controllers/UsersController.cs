@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using API.Data;
 using API.DTOs;
 using API.Entities;
@@ -37,5 +38,22 @@ namespace API.Controllers
             return await _userRepository.GetMemberAsync(username);
         }
 
+        [HttpPut]
+        public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
+        {
+            //! How this User (Claim) works?
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userRepository.GetUserByUsernameAsync(username);
+
+            //* instead of mapping one by one like: user.City = memberUpdateDto.City use AutoMapper
+            _mapper.Map(memberUpdateDto, user);
+
+            _userRepository.Update(user);
+
+            //if saving is successful it sends no content since it's not necessary for put req
+            if (await _userRepository.SaveAllAsync()) return NoContent();
+
+            return BadRequest("Failed to update use");
+        }
     }
 }
