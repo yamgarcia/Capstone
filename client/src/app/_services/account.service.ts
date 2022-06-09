@@ -10,6 +10,9 @@ import { environment } from 'src/environments/environment';
  *  until the application is closed).
  * Components data is destroied as soon as they are not in use.
  * Services are usually user for http requests but also have other uses.
+ * 
+ * As Services operates as Singletons it stays up until the application is closed
+ * making it a good place to store state. It makes Redux unnecessary.
  */
 
 @Injectable({
@@ -34,7 +37,7 @@ export class AccountService {
 
   constructor(private http: HttpClient) {}
 
-  //anything inside the pipe is an RXJS operator
+  //anything inside the pipe is an RXJS operator (like the map)
   login(model: any) {
     return this.http.post(this.baseUrl + this.loginRoute, model).pipe(
       map((res: User) => {
