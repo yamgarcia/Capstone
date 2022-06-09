@@ -41,13 +41,13 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     MemberEditComponent,
   ],
   imports: [
-BrowserModule,
+    BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
     SharedModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
