@@ -30,8 +30,8 @@ namespace API.Controllers
             return Ok(await _userRepository.GetMembersAsync());
         }
 
-        // api/user/3 = Jean's ID
-        [HttpGet("{username}")]
+        //* Giving the route a name helps using the param in another method (AddPhoto)
+        [HttpGet("{username}", Name = "GetUser")]
         public async Task<ActionResult<MemberDto>> GetUsers(string username)
         {
             return await _userRepository.GetMemberAsync(username);
@@ -85,7 +85,9 @@ namespace API.Controllers
             // Finally the photo is returned
             if (await _userRepository.SaveAllAsync())
             {
-                return _mapper.Map<PhotoDto>(photo);
+                // return _mapper.Map<PhotoDto>(photo);
+                // This refectoring should help returning a 201 from server
+                return CreatedAtRoute("GetUser", new { username = user.UserName }, _mapper.Map<PhotoDto>(photo));
             }
 
             // Bad request if smt wrong happens
