@@ -1,32 +1,75 @@
 <form [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off">
   <h2 class="text-center text-primary">Sign up</h2>
   <hr />
-  <div class="form-group">
+  <div class="form-group m-2">
     <input
+      [class.is-invalid]="
+        registerForm.get('username').errors &&
+        registerForm.get('username').touched
+      "
       type="text"
       class="form-control m-2"
       name="username"
       formControlName="username"
       placeholder="Username"
     />
+    <div class="invalid-feedback">Username required</div>
   </div>
   <div class="form-group m-2 danger">
     <input
+      [class.is-invalid]="
+        registerForm.get('password').errors &&
+        registerForm.get('password').touched
+      "
       type="password"
-      class="form-control"
+      class="form-control m-2"
       name="password"
       formControlName="password"
       placeholder="Password"
     />
+    <div
+      *ngIf="registerForm.get('password').hasError('required')"
+      class="invalid-feedback"
+    >
+      Password required
+    </div>
+    <div
+      *ngIf="registerForm.get('password').hasError('minlength')"
+      class="invalid-feedback"
+    >
+      Password must be longer than 4 characters
+    </div>
+    <div
+      *ngIf="registerForm.get('password').hasError('maxlength')"
+      class="invalid-feedback"
+    >
+      Password must be shorter than 20 characters
+    </div>
   </div>
   <div class="form-group m-2 danger">
     <input
+      [class.is-invalid]="
+        registerForm.get('confirmPassword').errors &&
+        registerForm.get('confirmPassword').touched
+      "
       type="password"
-      class="form-control"
+      class="form-control m-2"
       name="confirmPassword"
       formControlName="confirmPassword"
       placeholder="Confirm Password"
     />
+    <div
+      *ngIf="registerForm.get('confirmPassword').hasError('required')"
+      class="invalid-feedback"
+    >
+      Confirm password
+    </div>
+    <div
+      *ngIf="registerForm.get('confirmPassword').hasError('isMatching')"
+      class="invalid-feedback"
+    >
+      Passwords must match
+    </div>
   </div>
   <div class="form-group text-center">
     <button class="btn btn-success m-2" type="submit">Register</button>
