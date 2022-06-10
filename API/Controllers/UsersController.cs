@@ -16,8 +16,10 @@ namespace API.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        public UsersController(IUserRepository userRepository, IMapper mapper)
+        private readonly IPhotoService _photoService;
+        public UsersController(IUserRepository userRepository, IMapper mapper, IPhotoService photoService)
         {
+            _photoService = photoService;
             _mapper = mapper;
             _userRepository = userRepository;
         }
@@ -38,7 +40,7 @@ namespace API.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
         {
-            
+
             var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
 
             //* instead of mapping one by one like: user.City = memberUpdateDto.City use AutoMapper
@@ -50,6 +52,45 @@ namespace API.Controllers
             if (await _userRepository.SaveAllAsync()) return NoContent();
 
             return BadRequest("Failed to update use");
+        }
+
+        [HttpPost("add-photo")]
+        public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
+        {
+            // Get users so their photo can be used
+            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
+
+            // get the result from cloudinary IPhotoService
+            var result = await _photoService.AddPhotoAsync(file);
+
+            // check the result 
+            if (result.Error != null) return BadRequest(result.Error.Message);
+
+            // If no error a new photo is instantiated
+            var photo = new Photo
+            {
+                Url = result.SecureUrl.AbsoluteUri,
+                PublicId = result.PublicId
+            };
+
+            // Check is user has any photo and set them to the main photo if not
+            if (user.Photos.Count == 0)
+            {
+                photo.IsMain = true;
+            }
+
+            // Add the photo to the collection
+            user.Photos.Add(photo);
+
+            // Finally the photo is returned
+            if (await _userRepository.SaveAllAsync())
+            {
+                return _mapper.Map<PhotoDto>(photo);
+            }
+
+            // Bad request if smt wrong happens
+            return BadRequest("Problem adding photo");
+
         }
     }
 }
