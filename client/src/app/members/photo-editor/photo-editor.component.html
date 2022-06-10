@@ -1,26 +1,34 @@
-<div class="row">
-  <div class="col-2" *ngFor="let photo of member.photos">
-    <img
-      src="{{ photo.url }}"
-      alt="{{ photo.url }}"
-      class="img-thumbnail p-1"
-    />
-    <div class="text-center">
-      <button
-        [disabled]="photo.isMain"
-        (click)="setMainPhoto(photo)"
-        [ngClass]="photo.isMain ? 'btn-success active' : 'btn-outline-success'"
-        class="btn btn-sm"
-      >
-        Main
-      </button>
-      <button
-        [disabled]="photo.isMain"
-        (click)="deletePhoto(photo.id)"
-        class="btn btn-sm btn-danger"
-      >
-        <i class="fa fa-trash"></i>
-      </button>
+<div class="container">
+  <div class="row">
+    <div
+      class="col d-flex justify-content-center"
+      *ngFor="let photo of member.photos"
+    >
+      <img
+        src="{{ photo.url }}"
+        alt="{{ photo.url }}"
+        class="img-thumbnail p-1 m-2 text-center"
+        style="width: 50px"
+      />
+      <div class="">
+        <button
+          [disabled]="photo.isMain"
+          (click)="setMainPhoto(photo)"
+          [ngClass]="
+            photo.isMain ? 'btn-success active' : 'btn-outline-success'
+          "
+          class="btn btn-sm m-3"
+        >
+          Main
+        </button>
+        <button
+          [disabled]="photo.isMain"
+          (click)="deletePhoto(photo.id)"
+          class="btn btn-sm btn-danger"
+        >
+          <i class="fa fa-trash"></i>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -74,7 +82,7 @@
       </tbody>
     </table>
 
-    <div>
+    <div class="container-fluid">
       <div>
         Queue progress:
         <div class="progress" style="">
@@ -85,30 +93,33 @@
           ></div>
         </div>
       </div>
-      <button
-        type="button"
-        class="btn btn-success btn-s"
-        (click)="uploader.uploadAll()"
-        [disabled]="!uploader.getNotUploadedItems().length"
-      >
-        <span class="fa fa-upload"></span> Upload all
-      </button>
-      <button
-        type="button"
-        class="btn btn-warning btn-s"
-        (click)="uploader.cancelAll()"
-        [disabled]="!uploader.isUploading"
-      >
-        <span class="fa fa-ban"></span> Cancel all
-      </button>
-      <button
-        type="button"
-        class="btn btn-danger btn-s"
-        (click)="uploader.clearQueue()"
-        [disabled]="!uploader.queue.length"
-      >
-        <span class="fa fa-trash"></span> Remove all
-      </button>
+      <br />
+      <div class="d-grid gap-3 btn-set d-flex m-3">
+        <button
+          type="button"
+          class="btn btn-success btn-s w-25 p-3"
+          (click)="uploader.uploadAll()"
+          [disabled]="!uploader.getNotUploadedItems().length"
+        >
+          <span class="fa fa-upload"></span> Upload all
+        </button>
+        <button
+          type="button"
+          class="btn btn-warning btn-s w-25 p-3"
+          (click)="uploader.cancelAll()"
+          [disabled]="!uploader.isUploading"
+        >
+          <span class="fa fa-ban"></span> Cancel all
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger btn-s w-25 p-3"
+          (click)="uploader.clearQueue()"
+          [disabled]="!uploader.queue.length"
+        >
+          <span class="fa fa-trash"></span> Remove all
+        </button>
+      </div>
     </div>
   </div>
 </div>
