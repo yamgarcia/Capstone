@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
  *  until the application is closed).
  * Components data is destroied as soon as they are not in use.
  * Services are usually user for http requests but also have other uses.
- * 
+ *
  * As Services operates as Singletons it stays up until the application is closed
  * making it a good place to store state. It makes Redux unnecessary.
  */
@@ -43,8 +43,7 @@ export class AccountService {
       map((res: User) => {
         const user = res;
         if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
-          this.currentUserSource.next(user);
+          this.setCurrentUser(user);
         }
       })
     );
@@ -54,14 +53,14 @@ export class AccountService {
     return this.http.post(this.baseUrl + this.registerRoute, model).pipe(
       map((user: User) => {
         if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
-          this.currentUserSource.next(user);
+          this.setCurrentUser(user);
         }
       })
     );
   }
 
   setCurrentUser(user: User) {
+    localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
   }
 
