@@ -9,6 +9,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -17,14 +18,16 @@ import {
 })
 export class RegisterComponent implements OnInit {
   @Output() cancelRegister = new EventEmitter();
-  model: any = {};
+  // If arrays are not initialized there can't be an length prop
+  validationErrors: string[] = [];
   registerForm: FormGroup;
   maxDate: Date;
 
   constructor(
     private accountService: AccountService,
     private toastr: ToastrService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -43,11 +46,7 @@ export class RegisterComponent implements OnInit {
       country: ['', Validators.required],
       password: [
         '',
-        [
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(20),
-        ],
+        [Validators.required, Validators.minLength(4), Validators.maxLength(8)],
       ],
       confirmPassword: [
         '',
@@ -68,15 +67,16 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    this.accountService.register(this.model).subscribe(
+    this.accountService.register(this.registerForm.value).subscribe(
       (res) => {
-        console.log(res);
+        this.router.navigateByUrl('/members');
         this.cancel();
       },
       (err) => {
         console.log(err);
         this.toastr.error(err.error.errors.Username);
         this.toastr.error(err.error.errors.Password);
+        this.validationErrors = err;
       }
     );
   }
