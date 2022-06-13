@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PaginatedResult } from '../_models/pagination';
 import { Pagination } from './../_models/pagination';
+import { UserParams } from './../_modules/UserParams';
 
 //? services in Angular let you define code or functionalities that are then accessible and reusable in many other components in your Angular project.
 @Injectable({
@@ -21,8 +22,6 @@ export class MembersService {
 
   members: Member[] = [];
 
-  paginatedResult: PaginatedResult<Member[]> = new PaginatedResult<Member[]>();
-
   constructor(private http: HttpClient) {}
 
   //* "of" operator is used to return something "of" an Observable. It turns the value into an Observable. (Used in mock HTTP Responses)
@@ -30,46 +29,62 @@ export class MembersService {
    *
    * @returns an Observable of the already stored members or the Observable that results from the 'get'
    */
-  getMembers(page?: number, itemsPerPage?: number) {
-    let params = new HttpParams();
+  getMembers(userParams: UserParams) {
+    let params = this.getPagiginationHeaders(
+      userParams.pageNumber,
+      userParams.pageSize
+    );
 
-    if (page !== null && itemsPerPage !== null) {
-      params = params.append('pageNumber', page.toString());
-      params = params.append('pageSize', itemsPerPage.toString());
-    }
+    params = params.append('minAge', userParams.minAge.toString());
+    params = params.append('maxAge', userParams.maxAge.toString());
+    params = params.append('gender', userParams.gender);
+
+    return this.getPaginatedResult<Member[]>(this.baseUrl + this.usersRoute, params);
+    /**
+       * 
+       if (this.members.length > 0) {
+         return of(this.members);
+       }
+       return this.http.get<Member[]>(this.baseUrl + this.usersRoute).pipe(
+         // map always returns the values as observables
+         map((members) => {
+           this.members = members;
+           return members;
+         })
+       );
+       */
+  }
+
+  private getPaginatedResult<T>(url, params) {
+    const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
 
     return this.http
-      .get<Member[]>(this.baseUrl + this.usersRoute, {
+      .get<T>(url, {
         observe: 'response',
         params,
       })
       .pipe(
         map((res) => {
-          this.paginatedResult.result = res.body;
+          paginatedResult.result = res.body;
 
           if (res.headers.get('Pagination') !== null) {
-            this.paginatedResult.pagination = JSON.parse(
+            paginatedResult.pagination = JSON.parse(
               res.headers.get('Pagination')
             );
           }
 
-          return this.paginatedResult;
+          return paginatedResult;
         })
       );
+  }
 
-    /**
-     * 
-     if (this.members.length > 0) {
-       return of(this.members);
-     }
-     return this.http.get<Member[]>(this.baseUrl + this.usersRoute).pipe(
-       // map always returns the values as observables
-       map((members) => {
-         this.members = members;
-         return members;
-       })
-     );
-     */
+  private getPagiginationHeaders(pageNumber: number, pageSize: number) {
+    let params = new HttpParams();
+
+    params = params.append('pageNumber', pageNumber.toString());
+    params = params.append('pageSize', pageSize.toString());
+
+    return params;
   }
 
   /**
