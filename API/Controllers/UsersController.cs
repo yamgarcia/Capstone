@@ -26,6 +26,10 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
         {
+            /**
+                Inside a controller we have access to the claims principle of the "User"
+            */
+
             var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
             userParams.CurrentUsername = user.UserName;
 

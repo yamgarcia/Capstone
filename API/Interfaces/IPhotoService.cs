@@ -9,6 +9,7 @@ namespace API.Interfaces
         /// </summary>
         /// <param name="file"> The file </param>
         Task<ImageUploadResult> AddPhotoAsync(IFormFile file);
+        
         /// <summary>
         ///     Parsed result of asset deletion. A very specific ID is needed to delete photos
         /// </summary>
