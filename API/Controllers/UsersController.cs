@@ -3,6 +3,7 @@ using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -24,10 +25,17 @@ namespace API.Controllers
             _userRepository = userRepository;
         }
 
+        // Because it's a query string, we need to specify "FromQuery" shows that the params are from the query string
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
         {
-            return Ok(await _userRepository.GetMembersAsync());
+            var users = await _userRepository.GetMembersAsync(userParams);
+            //Response can always be used inside the controllers
+            //AddPaginationHeader is the extension method we created
+
+            Response.AddPaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
+
+            return Ok(users);
         }
 
         //* Giving the route a name helps using the param in another method (AddPhoto)
