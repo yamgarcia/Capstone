@@ -15,5 +15,9 @@ namespace API.Helpers
                 ? MaxPageSize
                 : value;
         }
+
+        public string CurrentUsername { get; set; }
+
+        public string Gender { get; set; }
     }
 }

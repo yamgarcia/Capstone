@@ -32,11 +32,23 @@ namespace API.Data
                 because this is is smt in are only going to read from, meaning we are not going to do anything with these entities
                 we can use AsNoTracking();
             */
-            var query = _context.Users
-            .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-            .AsNoTracking();
+            /* 
+                AsQueryable allows to chose what to filter by
+            
+                var query = _context.Users
+                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .AsQueryable();
+            */
+            var query = _context.Users.AsQueryable();
 
-            return await PagedList<MemberDto>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
+            //Refactor to filter before it sends the query into the MemberDto
+            query = query.Where(u => u.UserName != userParams.CurrentUsername);
+            query = query.Where(u => u.Gender == userParams.Gender);
+
+            return await PagedList<MemberDto>.CreateAsync(query
+                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking(), userParams.PageNumber, userParams.PageSize);
         }
 
         public async Task<AppUser> GetUserByIdAsync(int id)
