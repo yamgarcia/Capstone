@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Member } from './../_modules/member';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, reduce } from 'rxjs/operators';
 import { PaginatedResult } from '../_models/pagination';
 import { Pagination } from './../_models/pagination';
 import { UserParams } from './../_modules/UserParams';
@@ -109,8 +109,15 @@ export class MembersService {
    * @returns an Observable from the method http.get()
    */
   getMember(username: string) {
-    const member = this.members.find((x) => x.userName === username);
-    if (member !== undefined) return of(member);
+    // console.log(this.memberCache);
+    // const member = [...this.memberCache.values()];
+    // console.log(member);
+    const member = [...this.memberCache.values()]
+      .reduce((arr, e) => arr.concat(e.result), [])
+      .find((member: Member) => member.userName === username);
+    // console.log(member);
+
+    if (member) return of(member);
 
     return this.http.get<Member>(this.baseUrl + 'users/' + username);
   }
