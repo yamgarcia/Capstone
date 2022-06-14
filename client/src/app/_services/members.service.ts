@@ -3,10 +3,12 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Member } from './../_modules/member';
 import { Observable, of } from 'rxjs';
-import { map, reduce } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { PaginatedResult } from '../_models/pagination';
-import { Pagination } from './../_models/pagination';
 import { UserParams } from './../_modules/UserParams';
+import { AccountService } from './account.service';
+import { take } from 'rxjs/operators';
+import { User } from '../_models/user';
 
 //? services in Angular let you define code or functionalities that are then accessible and reusable in many other components in your Angular project.
 @Injectable({
@@ -21,8 +23,31 @@ export class MembersService {
   usersRoute = 'users';
   members: Member[] = [];
   memberCache = new Map();
+  user: User;
+  userParams: UserParams;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private accountService: AccountService
+  ) {
+    this.accountService.currentUser$.pipe(take(1)).subscribe((user) => {
+      this.user = user;
+      this.userParams = new UserParams(user);
+    });
+  }
+
+  getUserParams() {
+    return this.userParams;
+  }
+
+  setUserParams(params: UserParams) {
+    this.userParams = params;
+  }
+
+  resetUserParams() {
+    this.userParams = new UserParams(this.user);
+    return this.userParams;
+  }
 
   //* "of" operator is used to return something "of" an Observable. It turns the value into an Observable. (Used in mock HTTP Responses)
   /**
