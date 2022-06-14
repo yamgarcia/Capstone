@@ -19,8 +19,8 @@ import { UserParams } from './../_modules/UserParams';
 export class MembersService {
   baseUrl = environment.apiUrl;
   usersRoute = 'users';
-
   members: Member[] = [];
+  memberCache = new Map();
 
   constructor(private http: HttpClient) {}
 
@@ -30,6 +30,11 @@ export class MembersService {
    * @returns an Observable of the already stored members or the Observable that results from the 'get'
    */
   getMembers(userParams: UserParams) {
+    // console.log(Object.values(userParams).join('-'));
+
+    var response = this.memberCache.get(Object.values(userParams).join('-'));
+    if (response) return of(response);
+
     let params = this.getPagiginationHeaders(
       userParams.pageNumber,
       userParams.pageSize
@@ -40,10 +45,17 @@ export class MembersService {
     params = params.append('gender', userParams.gender);
     params = params.append('orderBy', userParams.orderBy);
 
+    //set method needs a key and value
     return this.getPaginatedResult<Member[]>(
       this.baseUrl + this.usersRoute,
       params
+    ).pipe(
+      map((response) => {
+        this.memberCache.set(Object.values(userParams).join('-'), response);
+        return response;
+      })
     );
+
     /**
        * 
        if (this.members.length > 0) {
