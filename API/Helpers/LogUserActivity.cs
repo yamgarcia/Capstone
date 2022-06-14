@@ -27,12 +27,15 @@ namespace DatingApp.API.Helpers
             //* context after the action has been executed
             var resultContext = await next();
 
-            if (!resultContext.HttpContext.User.Identity.IsAuthenticated) return;
+            if(!resultContext.HttpContext.User.Identity.IsAuthenticated) return;
 
-            var username = resultContext.HttpContext.User.GetUsername();
+            // var userId = int.Parse(resultContext.HttpContext.User
+            //    .FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var userId = resultContext.HttpContext.User.GetUserId();
 
             var repo = resultContext.HttpContext.RequestServices.GetService<IUserRepository>();
-            var user = await repo.GetUserByUsernameAsync(username);
+            var user = await repo.GetUserByIdAsync(userId);
             user.LastActive = DateTime.Now;
             await repo.SaveAllAsync();
         }
