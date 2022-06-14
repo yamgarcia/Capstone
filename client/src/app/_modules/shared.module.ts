@@ -27,7 +27,7 @@ import { TimeagoModule } from 'ngx-timeago';
     BsDatepickerModule.forRoot(),
     PaginationModule.forRoot(),
     ButtonsModule.forRoot(),
-    TimeagoModule,
+    TimeagoModule.forRoot(),
   ],
   exports: [
     BsDropdownModule,
