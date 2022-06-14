@@ -1,13 +1,11 @@
-using System.Security.Claims;
-using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -24,10 +22,32 @@ namespace API.Controllers
             _userRepository = userRepository;
         }
 
+        // Because it's a query string, we need to specify "FromQuery" shows that the params are from the query string
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
         {
-            return Ok(await _userRepository.GetMembersAsync());
+            /**
+                Inside a controller we have access to the claims principle of the "User"
+            */
+
+            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
+            userParams.CurrentUsername = user.UserName;
+
+
+            //! Set a new property for enployers and employees and have the filter work similar to the gender filter
+            if (string.IsNullOrEmpty(userParams.Gender))
+            {
+                userParams.Gender = user.Gender == "male" ? "female" : "male";
+            }
+
+
+            var users = await _userRepository.GetMembersAsync(userParams);
+            //Response can always be used inside the controllers
+            //AddPaginationHeader is the extension method we created
+
+            Response.AddPaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
+
+            return Ok(users);
         }
 
         //* Giving the route a name helps using the param in another method (AddPhoto)

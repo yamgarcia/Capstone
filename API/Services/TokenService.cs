@@ -17,10 +17,12 @@ namespace API.Services
 
         public string CreateToken(AppUser user)
         {
-            //Adding claims
-            var claims = new List<Claim> 
+            // Adding claims
+            // *Claims added with JWT can be seen taking the token and passing to https://jwt.io/
+            var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
+                new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
             };
             //Creating Credentials 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
@@ -30,14 +32,14 @@ namespace API.Services
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddDays(7),
                 SigningCredentials = creds
-                
-            };          
+
+            };
             //Innitialize Handler for token creation
             var tokenHandler = new JwtSecurityTokenHandler();
             //Create Token
             var token = tokenHandler.CreateToken(tokenDescriptor);
             //Return it Written
-            return tokenHandler.WriteToken(token);      
+            return tokenHandler.WriteToken(token);
         }
     }
 }
