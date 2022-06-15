@@ -50,8 +50,10 @@ export class MembersService {
   }
 
   //* "of" operator is used to return something "of" an Observable. It turns the value into an Observable. (Used in mock HTTP Responses)
+
   /**
    *
+   * @param userParams
    * @returns an Observable of the already stored members or the Observable that results from the 'get'
    */
   getMembers(userParams: UserParams) {
@@ -60,7 +62,7 @@ export class MembersService {
     var response = this.memberCache.get(Object.values(userParams).join('-'));
     if (response) return of(response);
 
-    let params = this.getPagiginationHeaders(
+    let params = this.getPaginationHeaders(
       userParams.pageNumber,
       userParams.pageSize
     );
@@ -96,6 +98,12 @@ export class MembersService {
        */
   }
 
+  /**
+   *
+   * @param url
+   * @param params
+   * @returns PaginatedResult<T>
+   */
   private getPaginatedResult<T>(url, params) {
     const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
 
@@ -119,7 +127,13 @@ export class MembersService {
       );
   }
 
-  private getPagiginationHeaders(pageNumber: number, pageSize: number) {
+  /**
+   *
+   * @param pageNumber
+   * @param pageSize
+   * @returns HttpParams
+   */
+  private getPaginationHeaders(pageNumber: number, pageSize: number) {
     let params = new HttpParams();
 
     params = params.append('pageNumber', pageNumber.toString());
@@ -152,7 +166,7 @@ export class MembersService {
    * @param member
    * @returns {Observable} an Observable from the method http.put()
    */
-  updateMember(member: Member): Observable<any> {
+  updateMember(member: Member) {
     return this.http.put(this.baseUrl + this.usersRoute, member).pipe(
       map(() => {
         const index = this.members.indexOf(member);
@@ -167,5 +181,18 @@ export class MembersService {
 
   deletePhoto(photoId: number) {
     return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
+  }
+
+  addLike(username: string) {
+    return this.http.post(this.baseUrl + 'likes/' + username, {});
+  }
+
+  getLikes(predicate: string, pageNumber, pageSize) {
+    let params = this.getPaginationHeaders(pageNumber, pageSize);
+    params = params.append('predicate', predicate);
+    return this.getPaginatedResult<Partial<Member[]>>(
+      this.baseUrl + 'likes',
+      params
+    );
   }
 }
