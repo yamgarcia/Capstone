@@ -16,10 +16,14 @@ namespace API.Data
         ///<summary> DbSet corresponding to the Likes table</summary>
         public DbSet<UserLike> Likes { get; set; }
 
+        ///<summary> DbSet corresponding to the Messages table</summary>
+        public DbSet<Message> Messages { get; set; }
+
         ///<summary> Overridden method from DbContext to configure the relationship between liked and liking users.
         ///The DbContext class has a method called OnModelCreating that takes an instance of ModelBuilder as a parameter. This method is called by the framework when your context is first created to build the model and its mappings in memory. 
         ///</summary>
-        protected override void OnModelCreating(ModelBuilder builder){
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
             base.OnModelCreating(builder);
 
             builder.Entity<UserLike>()
@@ -38,6 +42,18 @@ namespace API.Data
                 .HasForeignKey(s => s.LikedUserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Message>()
+                .HasOne(u => u.Recipient)
+                .WithMany(m => m.MessagesReceived)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Message>()
+            // HasOne returns objects of the entity placed in the <Type>
+                .HasOne(u => u.Sender)
+            // WithMany returns objects of the <type> from the HasOne (AppUser Sender)
+                .WithMany(m => m.MessagesSent)
+            // Restrict doean't allow delete from all tables if one has deleted
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
 
