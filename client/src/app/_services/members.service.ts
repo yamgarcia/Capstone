@@ -49,8 +49,7 @@ export class MembersService {
     return this.userParams;
   }
 
-  //* "of" operator is used to return something "of" an Observable. It turns the value into an Observable. (Used in mock HTTP Responses)
-
+  
   /**
    *
    * @param userParams
@@ -58,8 +57,9 @@ export class MembersService {
    */
   getMembers(userParams: UserParams) {
     // console.log(Object.values(userParams).join('-'));
-
+    
     var response = this.memberCache.get(Object.values(userParams).join('-'));
+    // "of" operator is used to return something "of" an Observable. It turns the value into an Observable. (Used in mock HTTP Responses)
     if (response) return of(response);
 
     let params = this.getPaginationHeaders(
@@ -187,7 +187,14 @@ export class MembersService {
     return this.http.post(this.baseUrl + 'likes/' + username, {});
   }
 
-  getLikes(predicate: string, pageNumber, pageSize) {
+  /**
+   * 
+   * @param predicate taken from page headers should be either "liked" or "likedBy"
+   * @param pageNumber default 1
+   * @param pageSize default 5
+   * @returns 
+   */
+  getLikes(predicate: string, pageNumber: number, pageSize: number) {
     let params = this.getPaginationHeaders(pageNumber, pageSize);
     params = params.append('predicate', predicate);
     return this.getPaginatedResult<Partial<Member[]>>(
