@@ -62,7 +62,7 @@ export class MembersService {
     var response = this.memberCache.get(Object.values(userParams).join('-'));
     if (response) return of(response);
 
-    let params = this.getPagiginationHeaders(
+    let params = this.getPaginationHeaders(
       userParams.pageNumber,
       userParams.pageSize
     );
@@ -133,7 +133,7 @@ export class MembersService {
    * @param pageSize
    * @returns HttpParams
    */
-  private getPagiginationHeaders(pageNumber: number, pageSize: number) {
+  private getPaginationHeaders(pageNumber: number, pageSize: number) {
     let params = new HttpParams();
 
     params = params.append('pageNumber', pageNumber.toString());
@@ -166,7 +166,7 @@ export class MembersService {
    * @param member
    * @returns {Observable} an Observable from the method http.put()
    */
-  updateMember(member: Member): Observable<any> {
+  updateMember(member: Member) {
     return this.http.put(this.baseUrl + this.usersRoute, member).pipe(
       map(() => {
         const index = this.members.indexOf(member);
@@ -187,9 +187,12 @@ export class MembersService {
     return this.http.post(this.baseUrl + 'likes/' + username, {});
   }
 
-  getLikes(predicate: string) {
-    return this.http.get<Partial<Member[]>>(
-      this.baseUrl + 'likes?predicate=' + predicate
+  getLikes(predicate: string, pageNumber, pageSize) {
+    let params = this.getPaginationHeaders(pageNumber, pageSize);
+    params = params.append('predicate', predicate);
+    return this.getPaginatedResult<Partial<Member[]>>(
+      this.baseUrl + 'likes',
+      params
     );
   }
 }
