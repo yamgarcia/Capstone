@@ -50,9 +50,11 @@ export class MembersService {
   }
 
   //* "of" operator is used to return something "of" an Observable. It turns the value into an Observable. (Used in mock HTTP Responses)
+  
   /**
-   *
-   * @returns an Observable of the already stored members or the Observable that results from the 'get'
+   * 
+   * @param userParams 
+   * @returns an Observable of the already stored members or the Observable that results from the 'get' 
    */
   getMembers(userParams: UserParams) {
     // console.log(Object.values(userParams).join('-'));
@@ -96,6 +98,12 @@ export class MembersService {
        */
   }
 
+  /**
+   * 
+   * @param url 
+   * @param params 
+   * @returns PaginatedResult<T>
+   */
   private getPaginatedResult<T>(url, params) {
     const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
 
@@ -119,6 +127,12 @@ export class MembersService {
       );
   }
 
+  /**
+   * 
+   * @param pageNumber 
+   * @param pageSize 
+   * @returns HttpParams
+   */
   private getPagiginationHeaders(pageNumber: number, pageSize: number) {
     let params = new HttpParams();
 
@@ -167,5 +181,13 @@ export class MembersService {
 
   deletePhoto(photoId: number) {
     return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
+  }
+
+  addLike(username: string) {
+    return this.http.post(this.baseUrl + 'likes/' + username, {})
+  }
+
+  getLikes(predicate: string) {
+    return this.http.get(this.baseUrl + 'likes?=' + predicate)
   }
 }
