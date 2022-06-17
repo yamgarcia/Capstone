@@ -21,7 +21,7 @@
         </div>
         <div>
           <strong>Member Since:</strong>
-          <p>{{member.created | date: 'dd MMM yyyy'}}</p>
+          <p>{{ member.created | date: "dd MMM yyyy" }}</p>
         </div>
       </div>
       <div class="card-footer">
@@ -56,8 +56,7 @@
         </ngx-gallery>
       </tab>
       <tab heading="Messages">
-        <h4>Messages</h4>
-        <p>Messages go here</p>
+        <app-member-messages [username]="member.userName"></app-member-messages>
       </tab>
     </tabset>
   </div>
