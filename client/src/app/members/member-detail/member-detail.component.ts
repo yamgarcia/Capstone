@@ -18,7 +18,7 @@ import { MessageService } from './../../_services/message.service';
 })
 export class MemberDetailComponent implements OnInit {
   //memberTabs is the tabset in the html
-  @ViewChild('memberTabs', {static: true}) memberTabs: TabsetComponent;
+  @ViewChild('memberTabs', { static: true }) memberTabs: TabsetComponent;
   member: Member;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
@@ -33,9 +33,12 @@ export class MemberDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadMember();
+    //` this uses the member-detailed.resolver to garantee the member is fetched
+    this.route.data.subscribe((data) => {
+      this.member = data.member;
+    });
 
-    // select tabs baser on the query
+    // select tabs based on the query
     this.route.queryParams.subscribe((param) => {
       param.tab ? this.selectTab(param.tab) : this.selectTab(0);
     });
@@ -50,6 +53,8 @@ export class MemberDetailComponent implements OnInit {
         preview: false,
       },
     ];
+
+    this.galleryImages = this.getImages();
   }
 
   getImages(): NgxGalleryImage[] {
@@ -64,15 +69,15 @@ export class MemberDetailComponent implements OnInit {
     return imageUrls;
   }
 
-  //* getMember param is to get username as per written in the app-routing
+  /* //getMember param is to get username as per written in the app-routing
   loadMember() {
     this.membersService
       .getMember(this.route.snapshot.paramMap.get('username'))
       .subscribe((member) => {
         this.member = member;
-        this.galleryImages = this.getImages();
       });
   }
+  */
 
   loadMessages() {
     this.messageService
