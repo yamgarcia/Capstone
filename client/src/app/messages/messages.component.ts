@@ -33,6 +33,10 @@ export class MessagesComponent implements OnInit {
       });
   }
 
+  /**
+   * Deletes message in the UI after sending DELETE request to the API.
+   * @param id of the message to be deleted
+   */
   deleteMessage(id: number) {
     this.messageService.deleteMessage(id).subscribe(() => {
       this.messages.splice(
