@@ -35,6 +35,12 @@ export class MessageService {
     );
   }
 
+  /**
+   *
+   * @param username of the receiver
+   * @param content of the message
+   * @returns an observable resulting from the http method
+   */
   sendMessage(username: string, content: string) {
     return this.http.post<Message>(this.baseUrl + 'messages', {
       recipientUsername: username,
