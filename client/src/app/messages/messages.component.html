@@ -28,7 +28,7 @@
 </div>
 
 <div class="row" *ngIf="messages?.length === 0">
-  <h3>No messages</h3>
+  <h3>Congrats! You've read your messages!</h3>
 </div>
 
 <div class="row" *ngIf="messages?.length > 0">
@@ -83,7 +83,10 @@
 </div>
 
 <!-- pagination -->
-<div class="d-flex justify-content-center" *ngIf="pagination && !loading">
+<div
+  class="d-flex justify-content-center"
+  *ngIf="pagination && !loading && messages?.length > 0"
+>
   <pagination
     [boundaryLinks]="true"
     [totalItems]="pagination.totalItems"
