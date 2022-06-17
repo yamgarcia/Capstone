@@ -17,7 +17,8 @@ import { MessageService } from './../../_services/message.service';
   styleUrls: ['./member-detail.component.css'],
 })
 export class MemberDetailComponent implements OnInit {
-  @ViewChild('memberTabs') memberTabs: TabsetComponent;
+  //memberTabs is the tabset in the html
+  @ViewChild('memberTabs', {static: true}) memberTabs: TabsetComponent;
   member: Member;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
@@ -33,6 +34,11 @@ export class MemberDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadMember();
+
+    // select tabs baser on the query
+    this.route.queryParams.subscribe((param) => {
+      param.tab ? this.selectTab(param.tab) : this.selectTab(0);
+    });
 
     this.galleryOptions = [
       {
@@ -69,9 +75,11 @@ export class MemberDetailComponent implements OnInit {
   }
 
   loadMessages() {
-    this.messageService.getMessageThread(this.member.userName).subscribe((message) => {
-      this.messages = message;
-    });
+    this.messageService
+      .getMessageThread(this.member.userName)
+      .subscribe((message) => {
+        this.messages = message;
+      });
   }
 
   onTabActivated(data: TabDirective) {
@@ -79,5 +87,13 @@ export class MemberDetailComponent implements OnInit {
     if (this.activeTab.heading === 'Messages' && this.messages.length === 0) {
       this.loadMessages();
     }
+  }
+
+  /**
+   * tabs go from one to zero (top to bottom) like arrays
+   * @param tabId
+   */
+  selectTab(tabId: number) {
+    this.memberTabs.tabs[tabId].active = true;
   }
 }
