@@ -9,6 +9,7 @@ import { UserParams } from './../_modules/UserParams';
 import { AccountService } from './account.service';
 import { take } from 'rxjs/operators';
 import { User } from '../_models/user';
+import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
 
 //? services in Angular let you define code or functionalities that are then accessible and reusable in many other components in your Angular project.
 @Injectable({
@@ -49,7 +50,6 @@ export class MembersService {
     return this.userParams;
   }
 
-  
   /**
    *
    * @param userParams
@@ -57,12 +57,12 @@ export class MembersService {
    */
   getMembers(userParams: UserParams) {
     // console.log(Object.values(userParams).join('-'));
-    
+
     var response = this.memberCache.get(Object.values(userParams).join('-'));
     // "of" operator is used to return something "of" an Observable. It turns the value into an Observable. (Used in mock HTTP Responses)
     if (response) return of(response);
 
-    let params = this.getPaginationHeaders(
+    let params = getPaginationHeaders(
       userParams.pageNumber,
       userParams.pageSize
     );
@@ -73,9 +73,9 @@ export class MembersService {
     params = params.append('orderBy', userParams.orderBy);
 
     //set method needs a key and value
-    return this.getPaginatedResult<Member[]>(
+    return getPaginatedResult<Member[]>(
       this.baseUrl + this.usersRoute,
-      params
+      params, this.http
     ).pipe(
       map((response) => {
         this.memberCache.set(Object.values(userParams).join('-'), response);
@@ -96,50 +96,6 @@ export class MembersService {
          })
        );
        */
-  }
-
-  /**
-   *
-   * @param url
-   * @param params
-   * @returns PaginatedResult<T>
-   */
-  private getPaginatedResult<T>(url, params) {
-    const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
-
-    return this.http
-      .get<T>(url, {
-        observe: 'response',
-        params,
-      })
-      .pipe(
-        map((res) => {
-          paginatedResult.result = res.body;
-
-          if (res.headers.get('Pagination') !== null) {
-            paginatedResult.pagination = JSON.parse(
-              res.headers.get('Pagination')
-            );
-          }
-
-          return paginatedResult;
-        })
-      );
-  }
-
-  /**
-   *
-   * @param pageNumber
-   * @param pageSize
-   * @returns HttpParams
-   */
-  private getPaginationHeaders(pageNumber: number, pageSize: number) {
-    let params = new HttpParams();
-
-    params = params.append('pageNumber', pageNumber.toString());
-    params = params.append('pageSize', pageSize.toString());
-
-    return params;
   }
 
   /**
@@ -188,18 +144,19 @@ export class MembersService {
   }
 
   /**
-   * 
+   *
    * @param predicate taken from page headers should be either "liked" or "likedBy"
    * @param pageNumber default 1
    * @param pageSize default 5
-   * @returns 
+   * @returns
    */
   getLikes(predicate: string, pageNumber: number, pageSize: number) {
-    let params = this.getPaginationHeaders(pageNumber, pageSize);
+    let params = getPaginationHeaders(pageNumber, pageSize);
     params = params.append('predicate', predicate);
-    return this.getPaginatedResult<Partial<Member[]>>(
+    return getPaginatedResult<Partial<Member[]>>(
       this.baseUrl + 'likes',
-      params
+      params,
+      this.http
     );
   }
 }

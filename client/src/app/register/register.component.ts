@@ -58,6 +58,11 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  /**
+   * @usageNotes check forms.d.ts "passwordMatchValidator"
+   * @param matchTo Form Element the current element must match to 
+   * @returns ValidationErrors | null
+   */
   matchValues(matchTo: string): ValidatorFn {
     return (control: AbstractControl) => {
       return control?.value === control?.parent?.controls[matchTo].value
