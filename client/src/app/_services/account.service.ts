@@ -48,7 +48,11 @@ export class AccountService {
       })
     );
   }
-
+/**
+ * 
+ * @param model the formControl current values 
+ * @returns 
+ */
   register(model: any) {
     return this.http.post(this.baseUrl + this.registerRoute, model).pipe(
       map((user: User) => {
