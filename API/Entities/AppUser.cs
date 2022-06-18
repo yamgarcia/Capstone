@@ -4,11 +4,12 @@ namespace API.Entities
 {
     public class AppUser : IdentityUser<int>
     {
-        public int Id { get; set; }
-
-        public string UserName { get; set; }
-
-        public byte[] PasswordHash { get; set; }
+        //? fileds replaced by IdentityUser:
+        /* 
+           public int Id { get; set; }
+           public string UserName { get; set; }
+           public byte[] PasswordHash { get; set; }
+          */
 
         public byte[] PasswordSalt { get; set; }
 
