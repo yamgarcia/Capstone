@@ -1,8 +1,8 @@
-using API.Extensions;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Entities
 {
-    public class AppUser
+    public class AppUser : IdentityUser<int>
     {
         public int Id { get; set; }
 
@@ -37,11 +37,15 @@ namespace API.Entities
         ///<summary> Collection of who has liked the currently logged in user  </summary>
         public ICollection<UserLike> LikedByUsers { get; set; }
 
-        ///<summary> Collection users liked by the currently logged in user </summary>
+        ///<summary> Collection of users liked by the currently logged in user </summary>
         public ICollection<UserLike> LikedUsers { get; set; }
 
+        ///<summary> Collection of messages sent BY the current user </summary>
         public ICollection<Message> MessagesSent { get; set; }
 
+        ///<summary> Collection of messages sent TO the current user </summary>
         public ICollection<Message> MessagesReceived { get; set; }
+
+        public ICollection<AppUserRole> UserRoles { get; set; }
     }
 }
