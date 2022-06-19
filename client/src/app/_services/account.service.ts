@@ -48,11 +48,11 @@ export class AccountService {
       })
     );
   }
-/**
- * 
- * @param model the formControl current values 
- * @returns 
- */
+  /**
+   *
+   * @param model the formControl current values
+   * @returns
+   */
   register(model: any) {
     return this.http.post(this.baseUrl + this.registerRoute, model).pipe(
       map((user: User) => {
@@ -63,13 +63,35 @@ export class AccountService {
     );
   }
 
+  /**
+   * update currentUserSource
+   * @param user to set as current user
+   */
   setCurrentUser(user: User) {
+    user.roles = [];
+    const roles = this.getDecodedToken(user.token).role;
+    // Multiple roles come as arrays from the token while single value does not
+    Array.isArray(roles) ? (user.roles = roles) : user.roles.push(roles);
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
   }
 
+  /**
+   * update currentUserSource with null
+   */
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
+  }
+
+  /**
+   * atob method takes a string, in this case the token that must be split in three parts.
+   * Token composition is: header, payload, and signature.
+   * [1] should return the second token segment.
+   * @param token
+   * @returns parsed token payload
+   */
+  getDecodedToken(token) {
+    return JSON.parse(atob(token.split('.')[1]));
   }
 }
