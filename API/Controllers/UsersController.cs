@@ -23,6 +23,7 @@ namespace API.Controllers
         }
 
         // Because it's a query string, we need to specify "FromQuery" shows that the params are from the query string
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
         {
