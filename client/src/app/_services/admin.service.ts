@@ -11,9 +11,27 @@ export class AdminService {
 
   constructor(private http: HttpClient) {}
 
+  /**
+   * Allows admins to get users with roles
+   * @returns get request
+   */
   getUsersWithRoles() {
     return this.http.get<Partial<User[]>>(
       this.baseUrl + 'admin/users-with-roles'
+    );
+  }
+
+  /**
+   * Allows admins to update roles
+   *
+   * @param username the username to be updated
+   * @param roles the query string containing the updated roles
+   * @returns post request
+   */
+  updateUserRoles(username: string, roles: string[]) {
+    return this.http.post(
+      this.baseUrl + 'admin/edit-roles/' + username + '?roles=' + roles,
+      {}
     );
   }
 }
