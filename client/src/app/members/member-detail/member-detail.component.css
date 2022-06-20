@@ -13,3 +13,9 @@
   background-color: aliceblue;
   border-top: none;
 }
+
+.user-card-img {
+  width: 100%;
+  height: 15vw;
+  object-fit: cover;
+}

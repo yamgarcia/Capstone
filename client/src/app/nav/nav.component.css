@@ -4,6 +4,9 @@
 }
 
 img {
+  height: 3vw;
+  width: 3vw;
+  object-fit: cover;
   max-height: 50px;
   border: 2px solid #fff;
   display: inline;

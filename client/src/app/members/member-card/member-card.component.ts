@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class MemberCardComponent implements OnInit {
   @Input() member: Member;
+  defaultPhotoUrl: string = '../../assets/user.png';
 
   constructor(
     private membersService: MembersService,
