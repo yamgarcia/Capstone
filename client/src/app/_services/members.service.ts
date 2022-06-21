@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Member } from './../_modules/member';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PaginatedResult } from '../_models/pagination';
 import { UserParams } from './../_modules/UserParams';
 import { AccountService } from './account.service';
 import { take } from 'rxjs/operators';
@@ -37,6 +36,10 @@ export class MembersService {
     });
   }
 
+  /**
+   * Can introduce bugs returning previous user's userParam
+   * @returns userParams
+   */
   getUserParams() {
     return this.userParams;
   }
@@ -82,20 +85,6 @@ export class MembersService {
         return response;
       })
     );
-
-    /**
-       * 
-       if (this.members.length > 0) {
-         return of(this.members);
-       }
-       return this.http.get<Member[]>(this.baseUrl + this.usersRoute).pipe(
-         // map always returns the values as observables
-         map((members) => {
-           this.members = members;
-           return members;
-         })
-       );
-       */
   }
 
   /**
@@ -147,7 +136,7 @@ export class MembersService {
    *
    * @param predicate taken from page headers should be either "liked" or "likedBy"
    * @param pageNumber default 1
-   * @param pageSize default 5
+   * @param pageSize default 4
    * @returns
    */
   getLikes(predicate: string, pageNumber: number, pageSize: number) {
