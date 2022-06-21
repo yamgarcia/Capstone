@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { AccountService } from './../_services/account.service';
 import { User } from './../_models/user';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { take } from 'rxjs/internal/operators/take';
+import { UserParams } from '../_modules/UserParams';
 
 @Component({
   //Use selector to add components to other components
@@ -13,6 +14,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class NavComponent implements OnInit {
   model: any = {};
+  // user: User;
+  // userParams: UserParams;
 
   constructor(
     public accountService: AccountService,
