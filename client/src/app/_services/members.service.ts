@@ -30,10 +30,7 @@ export class MembersService {
     private http: HttpClient,
     private accountService: AccountService
   ) {
-    this.accountService.currentUser$.pipe(take(1)).subscribe((user) => {
-      this.user = user;
-      this.userParams = new UserParams(user);
-    });
+    this.fetchAndSetNewUserParam();
   }
 
   /**
@@ -41,7 +38,18 @@ export class MembersService {
    * @returns userParams
    */
   getUserParams() {
+    this.fetchAndSetNewUserParam();
     return this.userParams;
+  }
+
+  /**
+   * Get current/new user, create a new userParams, and set variables accordingly
+   */
+  fetchAndSetNewUserParam(){
+    this.accountService.currentUser$.pipe(take(1)).subscribe((user) => {
+      this.user = user;
+      this.userParams = new UserParams(user);
+    });
   }
 
   setUserParams(params: UserParams) {
