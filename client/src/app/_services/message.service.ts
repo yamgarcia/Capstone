@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Message } from '../_models/message';
 import { User } from '../_models/user';
 import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
-
+import { take } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
@@ -21,18 +21,24 @@ export class MessageService {
 
   createHubConnection(user: User, otherUsername: string) {
     this.hubConnection = new HubConnectionBuilder()
-    //Adds the other user username to the query 
+      //Adds the other user username to the query
       .withUrl(this.hubUrl + 'message?user=' + otherUsername, {
-        accessTokenFactory: () => user.token
+        accessTokenFactory: () => user.token,
       })
       .withAutomaticReconnect()
-      .build()
+      .build();
 
-    this.hubConnection.start().catch(error => console.log(error));
+    this.hubConnection.start().catch((error) => console.log(error));
 
-    this.hubConnection.on('ReceiveMessageThread', messages => {
+    this.hubConnection.on('ReceiveMessageThread', (messages) => {
       this.messageThreadSource.next(messages);
-    })
+    });
+
+    this.hubConnection.on('NewMessage', (message) => {
+      this.messageThread$.pipe(take(1)).subscribe((messages) => {
+        this.messageThreadSource.next([...messages, message]);
+      });
+    });
   }
 
   stopHubConnection() {
@@ -65,16 +71,28 @@ export class MessageService {
   }
 
   /**
-   *
+   * !Deprecated | hubConnection should take case of this now
    * @param username of the receiver
    * @param content of the message
    * @returns an observable resulting from the http method
    */
-  sendMessage(username: string, content: string) {
-    return this.http.post<Message>(this.baseUrl + 'messages', {
-      recipientUsername: username,
-      content,
-    });
+  // sendMessage(username: string, content: string) {
+  //   return this.http.post<Message>(this.baseUrl + 'messages', {
+  //     recipientUsername: username,
+  //     content,
+  //   });
+  // }
+
+  /**
+   * Needs to .catch since it's not returning an observable anymore 
+   * @param username of the receiver
+   * @param content of the message
+   * @returns a promise
+   */
+  async sendMessage(username: string, content: string) {
+    return this.hubConnection
+      .invoke('SendMessage', { recipientUsername: username, content })
+      .catch((error) => console.log(error));
   }
 
   deleteMessage(id: number) {
