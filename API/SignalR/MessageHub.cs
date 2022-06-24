@@ -19,8 +19,7 @@ namespace API.SignalR
             _messageRepository = messageRepository;
         }
 
-        // 
-        ///<summary> Creates a group for each user </summary>
+        ///<summary> Creates a group for each user - Add users to the group </summary>
         public override async Task OnConnectedAsync()
         {
             var httpContext = Context.GetHttpContext();
@@ -35,6 +34,8 @@ namespace API.SignalR
             await Clients.Group(groupName).SendAsync("ReceiveMessageThread", messages);
         }
 
+
+        ///<summary>Disconnects signalR and removes User from group </summary>
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             await base.OnDisconnectedAsync(exception);
