@@ -20,10 +20,11 @@ namespace API.Helpers
             //destination = MmemberDto field to map
             //Sender = AppUser in the Message entity
             CreateMap<Message, MessageDto>()
-            .ForMember(destination => destination.SenderPhotoUrl, options => options.MapFrom(src =>
+                .ForMember(destination => destination.SenderPhotoUrl, options => options.MapFrom(src =>
                     src.Sender.Photos.FirstOrDefault(x => x.IsMain).Url))
-            .ForMember(destination => destination.RecipientPhotoUrl, options => options.MapFrom(src =>
+                .ForMember(destination => destination.RecipientPhotoUrl, options => options.MapFrom(src =>
                     src.Recipient.Photos.FirstOrDefault(x => x.IsMain).Url));
+            CreateMap<DateTime, DateTime>().ConvertUsing(d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
         }
     }
 }

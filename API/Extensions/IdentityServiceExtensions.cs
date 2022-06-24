@@ -39,6 +39,25 @@ namespace API.Extensions
                     //Angular application
                     ValidateAudience = false
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    //Allows the client to send the token as a query string
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        var path = context.HttpContext.Request.Path;
+
+                        // "/hubs" matches on Startup MapHub configuration for SignalR
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                        {
+                            context.Token = accessToken;
+                        };
+
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             services.AddAuthorization(opt =>

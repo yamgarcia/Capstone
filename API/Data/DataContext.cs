@@ -28,6 +28,11 @@ namespace API.Data
         ///<summary> Overridden method from DbContext to configure the relationship between liked and liking users.
         ///The DbContext class has a method called OnModelCreating that takes an instance of ModelBuilder as a parameter. This method is called by the framework when your context is first created to build the model and its mappings in memory. 
         ///</summary>
+
+        public DbSet<Group> Groups { get; set; }
+
+        public DbSet<Connection> Connections { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
