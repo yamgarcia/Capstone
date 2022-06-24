@@ -29,7 +29,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   //* provides information inside the tab
   activeTab: TabDirective;
   messages: Message[] = [];
-  user: User
+  user: User;
 
   constructor(
     public presence: PresenceService,
@@ -42,9 +42,10 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     this.accountService.currentUser$
       .pipe(take(1))
       .subscribe((user) => (this.user = user));
+    //deactivates the routeReuseStrategy the the component reloads and new messages are shown
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
-  
+
   ngOnInit(): void {
     //` this uses the member-detailed.resolver to garantee the member is fetched
     this.route.data.subscribe((data) => {
@@ -55,7 +56,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((param) => {
       param.tab ? this.selectTab(param.tab) : this.selectTab(0);
     });
-    
+
     this.galleryOptions = [
       {
         width: '500px',
@@ -66,10 +67,10 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
         preview: false,
       },
     ];
-    
+
     this.galleryImages = this.getImages();
   }
-  
+
   getImages(): NgxGalleryImage[] {
     const imageUrls = [];
     for (const photo of this.member.photos) {
@@ -81,7 +82,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     }
     return imageUrls;
   }
-  
+
   /* //getMember param is to get username as per written in the app-routing
   loadMember() {
     this.membersService
@@ -91,19 +92,19 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     });
   }
   */
- 
- loadMessages() {
-   this.messageService
-   .getMessageThread(this.member.userName)
-   .subscribe((message) => {
-     this.messages = message;
-    });
+
+  loadMessages() {
+    this.messageService
+      .getMessageThread(this.member.userName)
+      .subscribe((message) => {
+        this.messages = message;
+      });
   }
-  
+
   /**
    * Create hub connection when user enters messages tab
    * Stops the hub connection when the user changes tabs
-   * @param data 
+   * @param data
    */
   onTabActivated(data: TabDirective) {
     this.activeTab = data;
@@ -121,7 +122,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.messageService.stopHubConnection();
   }
-  
+
   /**
    * tabs go from one to zero (top to bottom) like arrays
    * @param tabId
