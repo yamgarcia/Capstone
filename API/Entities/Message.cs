@@ -21,7 +21,7 @@ namespace API.Entities
         ///Null if the message hasn't been read
         public DateTime? DateRead { get; set; }
 
-        public DateTime MessageSent { get; set; } = DateTime.Now;
+        public DateTime MessageSent { get; set; } = DateTime.UtcNow;
 
         //Sender and Receiipient must delete a message before it's deleted from the server
         public bool SenderDeleted { get; set; }
