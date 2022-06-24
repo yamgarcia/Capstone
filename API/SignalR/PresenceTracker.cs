@@ -1,5 +1,6 @@
 namespace API.SignalR
 {
+    ///<summary> Maintains a disctionary of all the users that are online (their connections). Users are allowed to have multiple connections</summary>
     public class PresenceTracker
     {
         //` Generally a good idea to lock dictionaries before accessing it
@@ -18,7 +19,6 @@ namespace API.SignalR
                 else
                 {
                     OnlineUsers.Add(username, new List<string> { connectionId });
-
                 }
             }
 
@@ -27,6 +27,8 @@ namespace API.SignalR
 
         public Task UserDisconnected(string username, string connectionId)
         {
+            //` The Lock statement is used in threading, that limit the number of threads that can perform some activity or execute a portion of code at a time.
+            //` Always lock dictionaries before invoking them
             lock (OnlineUsers)
             {
                 if (!OnlineUsers.ContainsKey(username)) return Task.CompletedTask;
@@ -49,6 +51,18 @@ namespace API.SignalR
             }
 
             return Task.FromResult(onlineUsers);
+        }
+
+        ///<summary> Returns a list of connections for a particular user stored in the dictionary</summary>
+        public Task<List<string>> GetConnectionsForUser(string username)
+        {
+            List<string> connectionIds;
+            lock (OnlineUsers)
+            {
+                connectionIds = OnlineUsers.GetValueOrDefault(username);
+            }
+
+            return Task.FromResult(connectionIds);
         }
     }
 }
