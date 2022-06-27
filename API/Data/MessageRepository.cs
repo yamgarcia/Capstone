@@ -114,7 +114,8 @@ namespace API.Data
                     message.DateRead = DateTime.UtcNow;
                 }
 
-                await _context.SaveChangesAsync();
+                // messages should not be saved here since it's not the repository's job. The UnitOfWork should take care of it
+                // await _context.SaveChangesAsync();
             }
 
             // return the messages of type MessageDto
@@ -126,9 +127,9 @@ namespace API.Data
             _context.Connections.Remove(connection);
         }
 
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
+        // public async Task<bool> SaveAllAsync()
+        // {
+        //     return await _context.SaveChangesAsync() > 0;
+        // }
     }
 }

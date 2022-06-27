@@ -21,7 +21,8 @@ namespace API.Interfaces
     {
         void Update(AppUser user);
 
-        Task<bool> SaveAllAsync();
+        // transfered to UnitOfWork
+        // Task<bool> SaveAllAsync();
 
         Task<IEnumerable<AppUser>> GetUsersAsync();
 
