@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from './../../../environments/environment.prod';
 
 @Component({
   selector: 'app-test-errors',
@@ -7,7 +8,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./test-errors.component.css'],
 })
 export class TestErrorsComponent implements OnInit {
-  baseUrl = 'https://localhost:5001/api/';
+  // outputPath is where the build folder is created on ng build
+  baseUrl = environment.apiUrl;
   validationErrors: string[] = [];
 
   constructor(private http: HttpClient) {}

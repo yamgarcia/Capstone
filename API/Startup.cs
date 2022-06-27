@@ -71,11 +71,17 @@ namespace API
             app.UseAuthentication();
             app.UseAuthorization();
 
+            //` Use static files on localhost:5001 instead of ng serve
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<PresenceHub>("hubs/presence");
                 endpoints.MapHub<MessageHub>("hubs/message");
+                //` Takes care of sending users to the index.html, and Angular takes care of the client routes
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
