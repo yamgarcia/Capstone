@@ -61,7 +61,10 @@ The following project was made with
  <b>Cloudinary</b>
  - Create a file called 'appsettings.json' in the API folder;
  - Use an existent account or create one to get access and then add to the file:
-   ``` {
+  
+
+```json script
+ {
   "Logging": {
     "LogLevel": {
       "Default": "Information",
@@ -76,7 +79,9 @@ The following project was made with
     "secure": true
   },
   "AllowedHosts": "*"
-} ```js
+} 
+
+```
 
 - 
    
