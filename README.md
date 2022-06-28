@@ -7,7 +7,7 @@
 
 <br>
 
-### :rocket: Used Technologies
+### 👨‍💻 Used Technologies
 
 The following project was made with
 
@@ -43,7 +43,7 @@ The following project was made with
 - Push your branch: `git push origin my-feature`
    
 ---
-### :rocket: Running Locally
+### ⚒️ Running Locally
    
 <b>SSL Certificate</b>
 - Create a folder called 'ssl' in the client folder
@@ -56,7 +56,7 @@ The following project was made with
    
  <b>Dependencies</b>
  - Run npm install in the client folder;
- - Check API.csproj to match your .NET version and <TargetFramework> (dotnet --version);
+ - Check API.csproj to match your .NET version and TargetFramework (check 'dotnet --version');
    
  <b>Cloudinary</b>
  - Create a file called 'appsettings.json' in the API folder;
@@ -82,8 +82,6 @@ The following project was made with
 } 
 
 ```
-
-- 
    
 ### :memo: License
 
