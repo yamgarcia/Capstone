@@ -85,7 +85,7 @@ The following project was made with
    
 ### :memo: License
 
-This project is under the MIT License. See the file [LICENSE](LICENSE.md) for more details.
+This [project](https://www.udemy.com/course/build-an-app-with-aspnet-core-and-angular-from-scratch/) is under the MIT License. See the file [LICENSE](LICENSE.md) for more details.
 
 ---
 
