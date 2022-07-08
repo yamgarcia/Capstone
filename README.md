@@ -21,7 +21,6 @@ The following project was made with
 - [Typescript](https://www.typescriptlang.org/)
 - [SignalR](https://dotnet.microsoft.com/en-us/apps/aspnet/signalr)
 - [Postgres](https://www.postgresql.org/)
-- [Postgres](https://www.postgresql.org/)
 - [JSON Web Token](https://jwt.io/)
 - [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 - [Postman](https://insomnia.rest/)
