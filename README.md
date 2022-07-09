@@ -21,7 +21,6 @@ The following project was made with
 - [Typescript](https://www.typescriptlang.org/)
 - [SignalR](https://dotnet.microsoft.com/en-us/apps/aspnet/signalr)
 - [Postgres](https://www.postgresql.org/)
-- [Postgres](https://www.postgresql.org/)
 - [JSON Web Token](https://jwt.io/)
 - [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 - [Postman](https://insomnia.rest/)
@@ -29,6 +28,17 @@ The following project was made with
 - [Eslint](https://www.npmjs.com/package/eslint)
 
 ### :muscle: Project
+HCL's Power Object .net team Project
+The project is a Matching App focused on career and professional relationships.
+
+Consists of .NET in the back end and Angular for the front end. The architecture style is based on many
+design patterns, like the use of repositories for data access, role management, centralized error handlleing, and the use of websockets.
+
+The app main features are user Registration and Login, member Sorting and Filtration allowing other users to customize their preferences,
+Photos uploading through a thrid party service, and instant messaging so users can communicate when they feel 
+like they can collaborate on a project or if someone could be a good fit for a position.
+
+Extras: GitHub actions, CI/CD pipeline and Azure deployment.
 
 ### 🙋🏽‍♂️ Author's considerations
 
