@@ -15,6 +15,7 @@ export class MemberMessagesComponent implements OnInit {
   //must match the input's "name" attribute in the form
   //must have a ngModel (two way binding)
   messageContent: string;
+  loading = false;
   //`public injections can be accessed by the component template (html file)
   constructor(public messageService: MessageService) {}
 
@@ -25,10 +26,12 @@ export class MemberMessagesComponent implements OnInit {
    * Switch to the user of .then
    */
   sendMessage() {
+    this.loading = true;
     this.messageService
       .sendMessage(this.username, this.messageContent)
       .then(() => {
         this.messageForm.reset();
-      });
+      })
+      .finally(() => (this.loading = false));
   }
 }

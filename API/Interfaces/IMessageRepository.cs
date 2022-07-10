@@ -28,6 +28,6 @@ namespace API.Interfaces
         ///<summary> Returns a Message Thread between two users </summary>
         Task<IEnumerable<MessageDto>> GetMessageThread(string currentUsername, string recipientUsername);
 
-        Task<bool> SaveAllAsync();
+        // Task<bool> SaveAllAsync();
     }
 }

@@ -8,6 +8,7 @@ import { User } from '../_models/user';
 import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
 import { take } from 'rxjs/operators';
 import { Group } from '../_models/group';
+import { BusyService } from './busy.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -18,9 +19,10 @@ export class MessageService {
   private messageThreadSource = new BehaviorSubject<Message[]>([]);
   messageThread$ = this.messageThreadSource.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private busyService: BusyService) {}
 
   createHubConnection(user: User, otherUsername: string) {
+    this.busyService.busy();
     this.hubConnection = new HubConnectionBuilder()
       //Adds the other user username to the query
       .withUrl(this.hubUrl + 'message?user=' + otherUsername, {
@@ -29,7 +31,11 @@ export class MessageService {
       .withAutomaticReconnect()
       .build();
 
-    this.hubConnection.start().catch((error) => console.log(error));
+    this.hubConnection
+      .start()
+      .catch((error) => console.log(error))
+      //turn off loading indicators whether or not they fail
+      .finally(() => this.busyService.idle());
 
     this.hubConnection.on('ReceiveMessageThread', (messages) => {
       this.messageThreadSource.next(messages);
@@ -42,21 +48,23 @@ export class MessageService {
     });
 
     this.hubConnection.on('UpdatedGroup', (group: Group) => {
-      if (group.connections.some(x => x.username === otherUsername)) {
-        this.messageThread$.pipe(take(1)).subscribe(messages => {
-          messages.forEach(message => {
+      if (group.connections.some((x) => x.username === otherUsername)) {
+        this.messageThread$.pipe(take(1)).subscribe((messages) => {
+          messages.forEach((message) => {
             if (!message.dateRead) {
-              message.dateRead = new Date(Date.now())
+              message.dateRead = new Date(Date.now());
             }
-          })
+          });
           this.messageThreadSource.next([...messages]);
-        })
+        });
       }
-    })
+    });
   }
 
   stopHubConnection() {
     if (this.hubConnection) {
+      //clear the messages when it stops
+      this.messageThreadSource.next([]);
       this.hubConnection.stop();
     }
   }
@@ -98,7 +106,7 @@ export class MessageService {
   // }
 
   /**
-   * Needs to .catch since it's not returning an observable anymore 
+   * Needs to .catch since it's not returning an observable anymore
    * @param username of the receiver
    * @param content of the message
    * @returns a promise
