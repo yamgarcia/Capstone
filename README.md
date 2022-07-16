@@ -26,6 +26,7 @@ The following project was made with
 - [Postman](https://insomnia.rest/)
 - [Cors](https://www.npmjs.com/package/cors)
 - [Eslint](https://www.npmjs.com/package/eslint)
+- [Azure](https://azure.microsoft.com/en-ca/)
 
 ### :muscle: Project
 HCL's Power Object .net team Project
