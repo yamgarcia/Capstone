@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace API.Interfaces
 {
     ///<summary> Creates instancies of the repositories passing what they have in their constructor </summary>

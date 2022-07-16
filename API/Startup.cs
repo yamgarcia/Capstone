@@ -1,7 +1,6 @@
 using API.Extensions;
 using API.Middleware;
 using API.SignalR;
-using Microsoft.OpenApi.Models;
 
 namespace API
 {

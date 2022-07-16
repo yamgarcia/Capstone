@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using API.Extensions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc.Filters;
