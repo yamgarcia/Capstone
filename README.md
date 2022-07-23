@@ -29,7 +29,7 @@ The following project was made with
 - [Azure](https://azure.microsoft.com/en-ca/)
 
 ### :muscle: Project
-HCL's Power Object .net team Project
+HCL's Power Object .net team Project<br/>
 The project is a Matching App focused on career and professional relationships.
 
 Consists of .NET in the back end and Angular for the front end. The architecture style is based on many
