@@ -1,5 +1,6 @@
 <h4 align="center">
  <b><a href="">Linko<a></b> 
+ <a href="linko-app.herokuapp.com/" ><img src="./linko.png" width="500px" /><br></a>
 </h4>
 <p align="center">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-red">
